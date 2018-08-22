@@ -1,11 +1,13 @@
 faker_credit_score
 ==================
 
-|pypi| |unix_build| |coverage| |license|
+|pypi| |unix_build| |coverage| |license| |black|
 
-faker_credit_score is a community-created provider for the `Faker`_ Python package.
+faker_credit_score is a community-created provider for the `Faker`_ test data
+generator Python package.
 
-This package provides fake credit score data for testing purposes:
+This package provides fake credit score data for testing purposes. The four
+most common non-industry specific credit scoring models are supported:
 
 * FICO Score 8
 * Equifax Beacon 5.0
@@ -19,14 +21,14 @@ Install with pip:
 
 .. code:: bash
 
-    pip install faker_credit_score
+    $ pip install faker_credit_score
 
-Or install with setup.py
+Alternatively, install with setup.py:
 
 .. code:: bash
 
-    git clone https://github.com/crd/faker_credit_score.git
-    cd faker_credit_score && python setup.py install
+    $ git clone https://github.com/crd/faker_credit_score.git
+    $ cd faker_credit_score && python setup.py install
 
 Add the ``CreditScore`` Provider to your ``Faker`` instance:
 
@@ -38,12 +40,36 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
     fake = Faker()
     fake.add_provider(CreditScore)
 
-    fake.credit_score()
-    791
-    fake.credit_score_provider()
-    'TransUnion'
     fake.credit_score_name()
     'TransUnion FICO Risk Score, Classic 04'
+    fake.credit_score_provider()
+    'TransUnion'
+    fake.credit_score()
+    791
+
+Contributing
+------------
+
+Please, by all means, contribute! 
+
+testing
+-------
+
+Execute unit tests and calculate code coverage like so:
+
+.. code:: bash
+
+    $ coverage run -m unittest tests/*
+    ........
+    ----------------------------------------------------------------------
+    Ran 8 tests in 0.224s
+
+    OK
+
+    $ coverage report
+    Name                             Stmts   Miss  Cover
+    ----------------------------------------------------
+    faker_credit_score/__init__.py      40      0   100%
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version
@@ -61,5 +87,9 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
     :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
     :alt: BSD 3-Clause License
+
+.. |license| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
+    :target: https://github.com/ambv/black
+    :alt: Black code formatter
 
 .. _Faker: https://github.com/joke2k/faker
