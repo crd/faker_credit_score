@@ -6,7 +6,7 @@ from faker.providers import BaseProvider
 
 
 class CreditScoreObject(object):
-    def __init__(self, name="FICO SCORE 8", provider="FICO", score_range=[300, 850]):
+    def __init__(self, name="FICO SCORE 8", provider="FICO", score_range=(300, 850)):
         self.name = name
         self.provider = provider
         self.score_range = score_range
@@ -22,10 +22,10 @@ class CreditScore(BaseProvider):
     # * https://blog.myfico.com/whats-a-good-credit-score-range/
     # * https://www.wrightrealtors.com/home/credit-score.htm
 
-    fico8_range = [300, 850]
-    fico5_range = [334, 818]
-    fico2_range = [320, 844]
-    fico4_range = [309, 839]
+    fico8_range = (300, 850)
+    fico5_range = (334, 818)
+    fico2_range = (320, 844)
+    fico4_range = (309, 839)
 
     credit_score_types = OrderedDict(
         (
