@@ -13,7 +13,7 @@ from setuptools import Command, find_packages, setup
 
 # Package meta-data.
 NAME = 'faker_credit_score'
-DESCRIPTION = 'Faker Community Provider that adds credit score generation.'
+DESCRIPTION = 'Adds fake credit score data generation to Faker Python package.'
 URL = 'https://github.com/crd/faker_credit_score'
 EMAIL = 'cory.donnelly+faker_credit_score@gmail.com'
 AUTHOR = 'Cory Donnelly'
