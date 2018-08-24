@@ -8,6 +8,7 @@ name = "pypi"
 [dev-packages]
 coverage = "*"
 faker = "*"
+python-coveralls = "*"
 
 [requires]
 python_version = "3.6"
