@@ -6,6 +6,7 @@ from faker.providers import BaseProvider
 
 
 class CreditScoreObject(object):
+    """ Credit Score Object that uses fico8 as a sensible default. """
     def __init__(
         self,
         name="FICO Score 8",
@@ -17,7 +18,7 @@ class CreditScoreObject(object):
         self.score_range = score_range
 
 
-class CreditScore(BaseProvider):
+class Provider(BaseProvider):
 
     # FICO 8 Score is the most widely-used non-industry specific credit score model,
     # followed by 5, 2, and 4 as per https://www.myfico.com/credit-education/credit-scores/fico-score-versions
@@ -94,3 +95,5 @@ class CreditScore(BaseProvider):
     def _generate_credit_score(self, credit_score_range):
         """ Returns an integer within the range specified by credit_score_range. """
         return self.generator.random_int(*credit_score_range)
+
+CreditScore = Provider
