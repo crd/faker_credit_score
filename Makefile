@@ -11,9 +11,12 @@ setup:
 	pipenv install --dev --three
 
 activate:
-	pipenv shell -c
+	pipenv shell
 
 test:
-	pipenv run python -m unittest tests/test_faker_credit_score.py
+	pipenv run coverage run -m unittest tests/*
+
+coverage:
+	pipenv run coveralls
 
 .PHONY: help activate test

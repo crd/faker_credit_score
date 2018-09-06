@@ -1,18 +1,24 @@
 # coding=utf-8
 from __future__ import unicode_literals
-from collections import namedtuple, OrderedDict
+from collections import OrderedDict
 
 from faker.providers import BaseProvider
 
 
 class CreditScoreObject(object):
-    def __init__(self, name="FICO SCORE 8", provider="FICO", score_range=[300, 850]):
+    """ Credit Score Object that uses fico8 as a sensible default. """
+    def __init__(
+        self,
+        name="FICO Score 8",
+        providers=("Equifax", "Experian", "TransUnion"),
+        score_range=(300, 850),
+    ):
         self.name = name
-        self.provider = provider
+        self.providers = providers
         self.score_range = score_range
 
 
-class CreditScore(BaseProvider):
+class Provider(BaseProvider):
 
     # FICO 8 Score is the most widely-used non-industry specific credit score model,
     # followed by 5, 2, and 4 as per https://www.myfico.com/credit-education/credit-scores/fico-score-versions
@@ -22,17 +28,28 @@ class CreditScore(BaseProvider):
     # * https://blog.myfico.com/whats-a-good-credit-score-range/
     # * https://www.wrightrealtors.com/home/credit-score.htm
 
-    fico8_range = [300, 850]
-    fico5_range = [334, 818]
-    fico2_range = [320, 844]
-    fico4_range = [309, 839]
+    fico8_name = "FICO Score 8"
+    fico8_providers = ("Equifax", "Experian", "TransUnion")
+    fico8_range = (300, 850)
+
+    fico5_name = "Equifax Beacon 5.0"
+    fico5_providers = ("Equifax",)
+    fico5_range = (334, 818)
+
+    fico2_name = "Experian/Fair Isaac Risk Model V2SM"
+    fico2_providers = ("Experian",)
+    fico2_range = (320, 844)
+
+    fico4_name = "TransUnion FICO Risk Score, Classic 04"
+    fico4_providers = ("TransUnion",)
+    fico4_range = (309, 839)
 
     credit_score_types = OrderedDict(
         (
-            ("fico8", CreditScoreObject("FICO Score 8", "FICO", fico8_range)),
-            ("fico5", CreditScoreObject("Equifax Beacon 5.0", "Equifax", fico5_range)),
-            ("fico2", CreditScoreObject("Experian/Fair Isaac Risk Model V2SM", "Experian", fico2_range)),
-            ("fico4", CreditScoreObject("TransUnion FICO Risk Score, Classic 04", "TransUnion", fico4_range)),
+            ("fico8", CreditScoreObject(fico8_name, fico8_providers, fico8_range)),
+            ("fico5", CreditScoreObject(fico5_name, fico5_providers, fico5_range)),
+            ("fico2", CreditScoreObject(fico2_name, fico2_providers, fico2_range)),
+            ("fico4", CreditScoreObject(fico4_name, fico4_providers, fico4_range)),
         )
     )
     credit_score_types["fico"] = credit_score_types["fico8"]
@@ -47,7 +64,7 @@ class CreditScore(BaseProvider):
         """ Returns the name of the credit score provider. """
         if score_type is None:
             score_type = self.random_element(self.credit_score_types.keys())
-        return self._credit_score_type(score_type).provider
+        return self.random_element(self._credit_score_type(score_type).providers)
 
     def credit_score(self, score_type=None):
         """ Returns a valid credit score. """
@@ -78,3 +95,5 @@ class CreditScore(BaseProvider):
     def _generate_credit_score(self, credit_score_range):
         """ Returns an integer within the range specified by credit_score_range. """
         return self.generator.random_int(*credit_score_range)
+
+CreditScore = Provider
