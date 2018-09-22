@@ -14,14 +14,14 @@ most common non-industry specific credit scoring models are supported:
 * Experian/Fair Isaac Risk Model V2SM
 * TransUnion FICO Risk Score, Classic 04
 
-Usage
------
+Installation
+------------
 
 Install with pip:
 
 .. code:: bash
 
-    $ pip install faker_credit_score
+    $ pip install faker-credit-score
 
 Alternatively, install with setup.py:
 
@@ -29,6 +29,20 @@ Alternatively, install with setup.py:
 
     $ git clone https://github.com/crd/faker_credit_score.git
     $ cd faker_credit_score && python setup.py install
+
+Usage
+-----
+
+From the Command Line
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    $ faker credit_score -i faker_credit_score
+    756
+
+From within Python
+~~~~~~~~~~~~~~~~~~
 
 Add the ``CreditScore`` Provider to your ``Faker`` instance:
 
@@ -50,9 +64,9 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
 Contributing
 ------------
 
-Please, by all means, contribute! 
+Please, by all means, contribute!
 
-testing
+Testing
 -------
 
 Execute unit tests and calculate code coverage like so:
@@ -69,7 +83,7 @@ Execute unit tests and calculate code coverage like so:
     $ coverage report
     Name                             Stmts   Miss  Cover
     ----------------------------------------------------
-    faker_credit_score/__init__.py      40      0   100%
+    faker_credit_score/__init__.py      49      0   100%
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version
