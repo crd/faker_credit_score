@@ -21,7 +21,7 @@ Install with pip:
 
 .. code:: bash
 
-    $ pip install faker_credit_score
+    $ pip install faker-credit-score
 
 Alternatively, install with setup.py:
 
