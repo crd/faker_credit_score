@@ -52,7 +52,7 @@ Contributing
 
 Please, by all means, contribute! 
 
-testing
+Testing
 -------
 
 Execute unit tests and calculate code coverage like so:
@@ -69,7 +69,7 @@ Execute unit tests and calculate code coverage like so:
     $ coverage report
     Name                             Stmts   Miss  Cover
     ----------------------------------------------------
-    faker_credit_score/__init__.py      40      0   100%
+    faker_credit_score/__init__.py      49      0   100%
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version
