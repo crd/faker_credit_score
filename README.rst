@@ -14,8 +14,8 @@ most common non-industry specific credit scoring models are supported:
 * Experian/Fair Isaac Risk Model V2SM
 * TransUnion FICO Risk Score, Classic 04
 
-Usage
------
+Installation
+------------
 
 Install with pip:
 
@@ -29,6 +29,20 @@ Alternatively, install with setup.py:
 
     $ git clone https://github.com/crd/faker_credit_score.git
     $ cd faker_credit_score && python setup.py install
+
+Usage
+-----
+
+From the Command Line
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    $ faker credit_score -i faker_credit_score
+    756
+
+From within Python
+~~~~~~~~~~~~~~~~~~
 
 Add the ``CreditScore`` Provider to your ``Faker`` instance:
 
@@ -50,7 +64,7 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
 Contributing
 ------------
 
-Please, by all means, contribute! 
+Please, by all means, contribute!
 
 Testing
 -------
