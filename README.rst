@@ -41,8 +41,8 @@ From the Command Line
     $ faker credit_score -i faker_credit_score
     756
 
-From within Python
-~~~~~~~~~~~~~~~~~~
+From within your Python Project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Add the ``CreditScore`` Provider to your ``Faker`` instance:
 
@@ -64,7 +64,7 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
 Contributing
 ------------
 
-Please, by all means, contribute!
+By all means, contribute! I'd be happy to work with any first-time open source contributors so please, don't be shy.
 
 Testing
 -------

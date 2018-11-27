@@ -112,12 +112,12 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Software Development :: Testing',
+        'Topic :: Utilities',
     ],
     # $ setup.py publish support.
     cmdclass={
