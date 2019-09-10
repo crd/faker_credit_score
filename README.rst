@@ -1,7 +1,7 @@
 faker_credit_score
 ==================
 
-|pypi| |unix_build| |coverage| |license| |black|
+|pypi| |unix_build| |coverage| |license| |codacy| |black|
 
 faker_credit_score is a community-created provider for the `Faker`_ test data
 generator Python package.
@@ -101,6 +101,10 @@ Execute unit tests and calculate code coverage like so:
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
     :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
     :alt: BSD 3-Clause License
+
+.. |codacy| image:: https://api.codacy.com/project/badge/Grade/accb555dd0ae4e9598333988d57487e7
+    :target: https://www.codacy.com/manual/crd/faker_credit_score?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=crd/faker_credit_score&amp;utm_campaign=Badge_Grade
+    :alt: Codacy code quality grade
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
     :target: https://github.com/ambv/black
