@@ -96,4 +96,5 @@ class Provider(BaseProvider):
         """ Returns an integer within the range specified by credit_score_range. """
         return self.generator.random_int(*credit_score_range)
 
+
 CreditScore = Provider
