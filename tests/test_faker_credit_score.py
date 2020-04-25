@@ -11,33 +11,33 @@ from faker_credit_score import CreditScore
 
 class TestEnUS(unittest.TestCase):
     def setUp(self):
-        self.factory = Faker("en_US")
-        self.factory.add_provider(CreditScore)
-        self.factory.seed(0)
+        self.fake = Faker("en_US")
+        self.fake.add_provider(CreditScore)
+        Faker.seed(0)
 
     def test_random_credit_score(self):
         for _ in range(100):
-            credit_score = self.factory.credit_score()
+            credit_score = self.fake.credit_score()
             assert 300 <= credit_score <= 850
 
     def test_credit_score_of_a_specific_type(self):
         for _ in range(100):
-            credit_score = self.factory.credit_score("fico8")
+            credit_score = self.fake.credit_score("fico8")
             assert 300 <= credit_score <= 850
 
     def test_random_credit_score_provider(self):
         for _ in range(100):
-            provider = self.factory.credit_score_provider()
+            provider = self.fake.credit_score_provider()
             assert provider in ("FICO", "Experian", "Equifax", "TransUnion")
 
     def test_credit_score_provider_of_a_specific_type(self):
         for _ in range(100):
-            provider = self.factory.credit_score_provider("fico5")
+            provider = self.fake.credit_score_provider("fico5")
             assert provider == "Equifax"
 
     def test_random_credit_score_name(self):
         for _ in range(100):
-            name = self.factory.credit_score_name()
+            name = self.fake.credit_score_name()
             assert name in (
                 "FICO Score 8",
                 "Equifax Beacon 5.0",
@@ -47,7 +47,7 @@ class TestEnUS(unittest.TestCase):
 
     def test_credit_score_name_of_a_specific_type(self):
         for _ in range(100):
-            name = self.factory.credit_score_name("fico5")
+            name = self.fake.credit_score_name("fico5")
             assert name == "Equifax Beacon 5.0"
 
     def test_random_credit_score_full(self):
@@ -57,7 +57,7 @@ class TestEnUS(unittest.TestCase):
         660
         """
         for _ in range(100):
-            output = self.factory.credit_score_full()
+            output = self.fake.credit_score_full()
             assert re.match(r".+\n.+\n\d{3}\n", output)
 
     def test_credit_score_full_of_a_specific_type(self):
@@ -67,5 +67,5 @@ class TestEnUS(unittest.TestCase):
         660
         """
         for _ in range(100):
-            output = self.factory.credit_score_full("fico5")
+            output = self.fake.credit_score_full("fico5")
             assert re.match(r"Equifax Beacon 5\.0\nEquifax\n\d{3}\n", output)
