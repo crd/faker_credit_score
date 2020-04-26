@@ -66,7 +66,7 @@ class Provider(BaseProvider):
             ("fico4", CreditScoreObject(fico4_name, fico4_providers, fico4_range)),
             ("vantageScore3", CreditScoreObject(vantageScore3_name, vantageScore3_providers, vantageScore3_range)),
             ("fico10", CreditScoreObject(fico10_name, fico10_providers, fico10_range)),
-            ("fico10t", CreditScoreObject(fico10t_name, fico10t_providers, fico10t_range)),            
+            ("fico10t", CreditScoreObject(fico10t_name, fico10t_providers, fico10t_range)),
         )
     )
     credit_score_types["fico"] = credit_score_types["fico8"]
