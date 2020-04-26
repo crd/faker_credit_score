@@ -6,10 +6,12 @@ faker_credit_score
 faker_credit_score is a community-created provider for the `Faker`_ test data
 generator Python package.
 
-This package provides fake credit score data for testing purposes. The four
-most common non-industry specific credit scoring models are supported:
+This package provides fake credit score data for testing purposes. The most common non-industry specific credit scoring models are supported:
 
 * FICO Score 8
+* VantageScore 3.0
+* FICO Score 10
+* FICO Score 10 T
 * Equifax Beacon 5.0
 * Experian/Fair Isaac Risk Model V2SM
 * TransUnion FICO Risk Score, Classic 04
@@ -55,11 +57,11 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
     fake.add_provider(CreditScore)
 
     fake.credit_score_name()
-    'TransUnion FICO Risk Score, Classic 04'
+    # 'TransUnion FICO Risk Score, Classic 04'
     fake.credit_score_provider()
-    'TransUnion'
+    # 'TransUnion'
     fake.credit_score()
-    791
+    # 791
 
 Contributing
 ------------
@@ -74,16 +76,16 @@ Execute unit tests and calculate code coverage like so:
 .. code:: bash
 
     $ coverage run -m unittest tests/*
-    ........
+    ..............
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.224s
+    Ran 14 tests in 0.406s
 
     OK
 
     $ coverage report
     Name                             Stmts   Miss  Cover
     ----------------------------------------------------
-    faker_credit_score/__init__.py      49      0   100%
+    faker_credit_score/__init__.py      58      0   100%
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version

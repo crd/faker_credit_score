@@ -3,7 +3,7 @@ engines:
  pylint:
    enabled: true
    python_version: 3
-    
+
  duplication:
    enabled: true
 
@@ -12,9 +12,6 @@ engines:
 
  coverage:
    enabled: true
-
-languages:
-   python:
 
 exclude_paths:
 - tests/*
