@@ -45,12 +45,28 @@ class Provider(BaseProvider):
     fico4_providers = ("TransUnion",)
     fico4_range = (309, 839)
 
+    # VantageScore 3.0, FICO 10, and FICO 10 T are modelled on FICO 8
+    vantageScore3_name = "VantageScore 3.0"
+    vantageScore3_providers = fico8_providers
+    vantageScore3_range = fico8_range
+
+    fico10_name = "FICO Score 10"
+    fico10_providers = fico8_providers
+    fico10_range = fico8_range
+
+    fico10t_name = "FICO Score 10 T"
+    fico10t_providers = fico8_providers
+    fico10t_range = fico8_range
+
     credit_score_types = OrderedDict(
         (
             ("fico8", CreditScoreObject(fico8_name, fico8_providers, fico8_range)),
             ("fico5", CreditScoreObject(fico5_name, fico5_providers, fico5_range)),
             ("fico2", CreditScoreObject(fico2_name, fico2_providers, fico2_range)),
             ("fico4", CreditScoreObject(fico4_name, fico4_providers, fico4_range)),
+            ("vantageScore3", CreditScoreObject(vantageScore3_name, vantageScore3_providers, vantageScore3_range)),
+            ("fico10", CreditScoreObject(fico10_name, fico10_providers, fico10_range)),
+            ("fico10t", CreditScoreObject(fico10t_name, fico10t_providers, fico10t_range)),            
         )
     )
     credit_score_types["fico"] = credit_score_types["fico8"]
