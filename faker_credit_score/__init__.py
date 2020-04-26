@@ -7,6 +7,7 @@ from faker.providers import BaseProvider
 
 class CreditScoreObject(object):
     """ Credit Score Object that uses fico8 as a sensible default. """
+
     def __init__(
         self,
         name="FICO Score 8",
