@@ -1,4 +1,4 @@
 """Package version."""
-VERSION = (0, 2, 4)
+VERSION = (0, 3, 0)
 
 __version__ = ".".join(map(str, VERSION))
