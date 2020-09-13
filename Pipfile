@@ -9,6 +9,3 @@ name = "pypi"
 coverage = "*"
 faker = "*"
 python-coveralls = "*"
-
-[requires]
-python_version = "3.6"

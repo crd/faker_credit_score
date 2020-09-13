@@ -1,15 +1,17 @@
 faker_credit_score
 ==================
 
-|pypi| |unix_build| |coverage| |license| |black|
+|pypi| |unix_build| |coverage| |license| |codacy| |black|
 
 faker_credit_score is a community-created provider for the `Faker`_ test data
 generator Python package.
 
-This package provides fake credit score data for testing purposes. The four
-most common non-industry specific credit scoring models are supported:
+This package provides fake credit score data for testing purposes. The most common non-industry specific credit scoring models are supported:
 
 * FICO Score 8
+* VantageScore 3.0
+* FICO Score 10
+* FICO Score 10 T
 * Equifax Beacon 5.0
 * Experian/Fair Isaac Risk Model V2SM
 * TransUnion FICO Risk Score, Classic 04
@@ -55,11 +57,11 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
     fake.add_provider(CreditScore)
 
     fake.credit_score_name()
-    'TransUnion FICO Risk Score, Classic 04'
+    # 'TransUnion FICO Risk Score, Classic 04'
     fake.credit_score_provider()
-    'TransUnion'
+    # 'TransUnion'
     fake.credit_score()
-    791
+    # 791
 
 Contributing
 ------------
@@ -74,16 +76,16 @@ Execute unit tests and calculate code coverage like so:
 .. code:: bash
 
     $ coverage run -m unittest tests/*
-    ........
+    ..............
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.224s
+    Ran 14 tests in 0.406s
 
     OK
 
     $ coverage report
     Name                             Stmts   Miss  Cover
     ----------------------------------------------------
-    faker_credit_score/__init__.py      49      0   100%
+    faker_credit_score/__init__.py      58      0   100%
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version
@@ -101,6 +103,10 @@ Execute unit tests and calculate code coverage like so:
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
     :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
     :alt: BSD 3-Clause License
+
+.. |codacy| image:: https://api.codacy.com/project/badge/Grade/accb555dd0ae4e9598333988d57487e7
+    :target: https://www.codacy.com/manual/crd/faker_credit_score?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=crd/faker_credit_score&amp;utm_campaign=Badge_Grade
+    :alt: Codacy code quality grade
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
     :target: https://github.com/ambv/black
