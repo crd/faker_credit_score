@@ -75,7 +75,7 @@ Execute unit tests and calculate code coverage like so:
 
 .. code:: bash
 
-    $ coverage run -m unittest tests/*
+    $ pytest --cov=faker_credit_score
     ..............
     ----------------------------------------------------------------------
     Ran 14 tests in 0.406s
