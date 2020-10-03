@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-coverage = "*"
 faker = "*"
 python-coveralls = "*"
+pytest = "*"
+pytest-cov = "*"
