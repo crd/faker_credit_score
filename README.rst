@@ -9,10 +9,11 @@ generator Python package.
 This package provides fake credit score data for testing purposes. The most common non-industry specific credit scoring models are supported:
 
 * FICO Score 8
-* VantageScore 3.0
-* VantageScore 4.0
+* FICO Score 9
 * FICO Score 10
 * FICO Score 10 T
+* VantageScore 3.0
+* VantageScore 4.0
 * UltraFICO
 * Equifax Beacon 5.0
 * Experian/Fair Isaac Risk Model V2SM
