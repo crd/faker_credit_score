@@ -3,42 +3,67 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'      # e.g., v0.6.0, v0.6.1
-      - 'v*.*.*rc*'   # prereleases like v0.7.0rc1
+      - 'v*.*.*'       # e.g., v0.5.1
+      - 'v*.*.*rc*'    # e.g., v0.6.0rc1
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # needed so hatch-vcs can see tags
-      - uses: actions/setup-python@v5
+          fetch-depth: 0  # hatch-vcs needs tags; also good for versioning
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
+
       - name: Install uv
         run: pip install uv
-      - name: Install deps
-        run: uv pip install -e ".[dev]"
-      - name: Unit tests
+
+      - name: Sync deps (creates .venv, installs project + dev group)
+        run: uv sync
+
+      - name: Run tests
         run: uv run pytest -q
 
   publish-testpypi:
     needs: build-test
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     environment: testpypi
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.11'   # stable builder
+
       - name: Install uv
         run: pip install uv
-      - name: Build dist
+
+      - name: Build artifacts
         run: uv build --sdist --wheel
+
       - name: Publish to TestPyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}
@@ -46,19 +71,28 @@ jobs:
 
   promote-pypi:
     needs: publish-testpypi
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    environment: pypi   # protect with approvals in GitHub Environments
+    environment: pypi   # protect with required reviewers in repo Settings → Environments
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install uv
         run: pip install uv
-      - name: Build dist (repeat for safety)
+
+      - name: Build artifacts (repeat for safety)
         run: uv build --sdist --wheel
+
       - name: Publish to PyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
