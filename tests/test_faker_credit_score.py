@@ -65,14 +65,16 @@ def test_random_credit_score_name(fake):
         name = fake.credit_score_name()
         assert name in (
             "FICO Score 8",
+            "FICO Score 9",
             "Equifax Beacon 5.0",
             "Experian/Fair Isaac Risk Model V2SM",
             "TransUnion FICO Risk Score, Classic 04",
             "VantageScore 3.0",
+            "VantageScore 4.0",
             "FICO Score 10",
             "FICO Score 10 T",
+            "UltraFICO"
         )
-
 
 def test_credit_score_name_of_a_specific_type_fico5(fake):
     for _ in range(100):

@@ -31,16 +31,19 @@ class Provider(BaseProvider):
 
     # List of credit score types with names, providers, and ranges
     credit_score_data = [
-        ("fico8", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
-        ("fico5", "Equifax Beacon 5.0", ("Equifax",), (334, 818)),
         ("fico2", "Experian/Fair Isaac Risk Model V2SM", ("Experian",), (320, 844)),
         ("fico4", "TransUnion FICO Risk Score, Classic 04", ("TransUnion",), (309, 839)),
-        ("vantageScore3", "VantageScore 3.0", ("Equifax", "Experian", "TransUnion"), (300, 850)),  # based on FICO 8
+        ("fico5", "Equifax Beacon 5.0", ("Equifax",), (334, 818)),
+        ("fico8", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
+        ("fico9", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
         ("fico10", "FICO Score 10", ("Equifax", "Experian", "TransUnion"), (300, 850)),             # based on FICO 8
-        ("fico10t", "FICO Score 10 T", ("Equifax", "Experian", "TransUnion"), (300, 850))           # based on FICO 8
+        ("fico10t", "FICO Score 10 T", ("Equifax", "Experian", "TransUnion"), (300, 850)),          # based on FICO 8
+        ("ultrafico", "UltraFICO", ("Experian",), (300, 850)),                                      # based on FICO 8
+        ("vantageScore3", "VantageScore 3.0", ("Equifax", "Experian", "TransUnion"), (300, 850)),   # based on FICO 8
+        ("vantageScore4", "VantageScore 4.0", ("Equifax", "Experian", "TransUnion"), (300, 850))    # based on FICO 8
     ]
 
-    # Construct the OrderedDict with the original keys
+    # Construct the OrderedDict
     credit_score_types = OrderedDict(
         (key, CreditScoreObject(name, providers, score_range))
         for key, name, providers, score_range in credit_score_data
@@ -68,6 +71,7 @@ class Provider(BaseProvider):
         return score
 
     def credit_score_full(self, score_type=None):
+        """ Returns a tuple representation of a valid credit score. """
         credit_score_summary = self._credit_score_type(score_type)
 
         tpl = "{name}\n" "{provider}\n" "{credit_score}\n"
@@ -89,7 +93,7 @@ class Provider(BaseProvider):
 
     def _generate_credit_score(self, credit_score_range):
         """ Returns an integer within the range specified by credit_score_range. """
-        return self.generator.random_int(*credit_score_range)
+        return self.random_int(*credit_score_range)
 
 
 CreditScore = Provider
