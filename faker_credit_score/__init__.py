@@ -35,7 +35,7 @@ class Provider(BaseProvider):
         ("fico4", "TransUnion FICO Risk Score, Classic 04", ("TransUnion",), (309, 839)),
         ("fico5", "Equifax Beacon 5.0", ("Equifax",), (334, 818)),
         ("fico8", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
-        ("fico9", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
+        ("fico9", "FICO Score 9", ("Equifax", "Experian", "TransUnion"), (300, 850)),
         ("fico10", "FICO Score 10", ("Equifax", "Experian", "TransUnion"), (300, 850)),             # based on FICO 8
         ("fico10t", "FICO Score 10 T", ("Equifax", "Experian", "TransUnion"), (300, 850)),          # based on FICO 8
         ("ultrafico", "UltraFICO", ("Experian",), (300, 850)),                                      # based on FICO 8

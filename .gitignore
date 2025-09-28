@@ -103,5 +103,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# hatch vcs verison file
-faker_credit_score/__version__.py
+# Don't track hatch vcs verison file
+faker_credit_score/_version.py
