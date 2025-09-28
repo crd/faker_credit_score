@@ -14,7 +14,7 @@ activate:
 	pipenv shell
 
 test:
-	pipenv run coverage run -m unittest tests/*
+	pipenv run pytest --cov=faker_credit_score
 
 coverage:
 	pipenv run coveralls

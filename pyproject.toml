@@ -1,0 +1,45 @@
+[project]
+name = "faker-credit-score"
+dynamic = ["version"]
+description = "Adds fake credit score data generation to Faker Python package."
+readme = { file = "README.rst", content-type = "text/x-rst" }
+license = { file = "LICENSE" }
+authors = [{ name = "Cory Donnelly" }]
+requires-python = ">=3.9"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: BSD License",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "faker>=37.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/crd/faker-credit-score"
+Repository = "https://github.com/crd/faker-credit-score"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "python-coveralls>=2.9.3",
+]
+
+[build-system]
+requires = ["hatchling>=1.25", "hatch-vcs>=0.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "faker_credit_score/_version.py"  # optional file you can import if desired
+
+# (Nice-to-have) name an index for TestPyPI so `uv publish --index testpypi` works
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true

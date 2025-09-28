@@ -29,46 +29,27 @@ class Provider(BaseProvider):
     # * https://blog.myfico.com/whats-a-good-credit-score-range/
     # * https://www.wrightrealtors.com/home/credit-score.htm
 
-    fico8_name = "FICO Score 8"
-    fico8_providers = ("Equifax", "Experian", "TransUnion")
-    fico8_range = (300, 850)
+    # List of credit score types with names, providers, and ranges
+    credit_score_data = [
+        ("fico2", "Experian/Fair Isaac Risk Model V2SM", ("Experian",), (320, 844)),
+        ("fico4", "TransUnion FICO Risk Score, Classic 04", ("TransUnion",), (309, 839)),
+        ("fico5", "Equifax Beacon 5.0", ("Equifax",), (334, 818)),
+        ("fico8", "FICO Score 8", ("Equifax", "Experian", "TransUnion"), (300, 850)),
+        ("fico9", "FICO Score 9", ("Equifax", "Experian", "TransUnion"), (300, 850)),
+        ("fico10", "FICO Score 10", ("Equifax", "Experian", "TransUnion"), (300, 850)),             # based on FICO 8
+        ("fico10t", "FICO Score 10 T", ("Equifax", "Experian", "TransUnion"), (300, 850)),          # based on FICO 8
+        ("ultrafico", "UltraFICO", ("Experian",), (300, 850)),                                      # based on FICO 8
+        ("vantageScore3", "VantageScore 3.0", ("Equifax", "Experian", "TransUnion"), (300, 850)),   # based on FICO 8
+        ("vantageScore4", "VantageScore 4.0", ("Equifax", "Experian", "TransUnion"), (300, 850))    # based on FICO 8
+    ]
 
-    fico5_name = "Equifax Beacon 5.0"
-    fico5_providers = ("Equifax",)
-    fico5_range = (334, 818)
-
-    fico2_name = "Experian/Fair Isaac Risk Model V2SM"
-    fico2_providers = ("Experian",)
-    fico2_range = (320, 844)
-
-    fico4_name = "TransUnion FICO Risk Score, Classic 04"
-    fico4_providers = ("TransUnion",)
-    fico4_range = (309, 839)
-
-    # VantageScore 3.0, FICO 10, and FICO 10 T are modelled on FICO 8
-    vantageScore3_name = "VantageScore 3.0"
-    vantageScore3_providers = fico8_providers
-    vantageScore3_range = fico8_range
-
-    fico10_name = "FICO Score 10"
-    fico10_providers = fico8_providers
-    fico10_range = fico8_range
-
-    fico10t_name = "FICO Score 10 T"
-    fico10t_providers = fico8_providers
-    fico10t_range = fico8_range
-
+    # Construct the OrderedDict
     credit_score_types = OrderedDict(
-        (
-            ("fico8", CreditScoreObject(fico8_name, fico8_providers, fico8_range)),
-            ("fico5", CreditScoreObject(fico5_name, fico5_providers, fico5_range)),
-            ("fico2", CreditScoreObject(fico2_name, fico2_providers, fico2_range)),
-            ("fico4", CreditScoreObject(fico4_name, fico4_providers, fico4_range)),
-            ("vantageScore3", CreditScoreObject(vantageScore3_name, vantageScore3_providers, vantageScore3_range)),
-            ("fico10", CreditScoreObject(fico10_name, fico10_providers, fico10_range)),
-            ("fico10t", CreditScoreObject(fico10t_name, fico10t_providers, fico10t_range)),
-        )
+        (key, CreditScoreObject(name, providers, score_range))
+        for key, name, providers, score_range in credit_score_data
     )
+
+    # Add alias for FICO to map to FICO 8
     credit_score_types["fico"] = credit_score_types["fico8"]
 
     def credit_score_name(self, score_type=None):
@@ -90,6 +71,7 @@ class Provider(BaseProvider):
         return score
 
     def credit_score_full(self, score_type=None):
+        """ Returns a tuple representation of a valid credit score. """
         credit_score_summary = self._credit_score_type(score_type)
 
         tpl = "{name}\n" "{provider}\n" "{credit_score}\n"
@@ -111,7 +93,7 @@ class Provider(BaseProvider):
 
     def _generate_credit_score(self, credit_score_range):
         """ Returns an integer within the range specified by credit_score_range. """
-        return self.generator.random_int(*credit_score_range)
+        return self.random_int(*credit_score_range)
 
 
 CreditScore = Provider

@@ -9,9 +9,12 @@ generator Python package.
 This package provides fake credit score data for testing purposes. The most common non-industry specific credit scoring models are supported:
 
 * FICO Score 8
-* VantageScore 3.0
+* FICO Score 9
 * FICO Score 10
 * FICO Score 10 T
+* VantageScore 3.0
+* VantageScore 4.0
+* UltraFICO
 * Equifax Beacon 5.0
 * Experian/Fair Isaac Risk Model V2SM
 * TransUnion FICO Risk Score, Classic 04
@@ -19,18 +22,11 @@ This package provides fake credit score data for testing purposes. The most comm
 Installation
 ------------
 
-Install with pip:
+Install with pip (this will also install `Faker`_ if you don't already have it):
 
 .. code:: bash
 
     $ pip install faker-credit-score
-
-Alternatively, install with setup.py:
-
-.. code:: bash
-
-    $ git clone https://github.com/crd/faker_credit_score.git
-    $ cd faker_credit_score && python setup.py install
 
 Usage
 -----
@@ -75,7 +71,7 @@ Execute unit tests and calculate code coverage like so:
 
 .. code:: bash
 
-    $ coverage run -m unittest tests/*
+    $ pytest --cov=faker_credit_score
     ..............
     ----------------------------------------------------------------------
     Ran 14 tests in 0.406s
