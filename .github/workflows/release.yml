@@ -19,9 +19,35 @@ jobs:
           python-version: '3.11'
       - name: Install uv
         run: pip install uv
-      - name: Install deps
-        run: uv pip install -e ".[dev]"
-      - name: Unit tests
+      - name: Sync deps (creates .venv, installs project + dev group)
+        run: uv sync
+      - name: Run tests
+        run: uv run pytest -q
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'      # e.g., v0.6.0, v0.6.1
+      - 'v*.*.*rc*'   # prereleases like v0.7.0rc1
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed so hatch-vcs can see tags
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install uv
+        run: pip install uv
+      - name: Sync deps (creates .venv, installs project + dev group)
+        run: uv sync
+      - name: Run tests
         run: uv run pytest -q
 
   publish-testpypi:
@@ -47,7 +73,7 @@ jobs:
   promote-pypi:
     needs: publish-testpypi
     runs-on: ubuntu-latest
-    environment: pypi   # protect with approvals in GitHub Environments
+    environment: pypi   # protected with approvals
     steps:
       - uses: actions/checkout@v4
         with:
@@ -57,9 +83,11 @@ jobs:
           python-version: '3.11'
       - name: Install uv
         run: pip install uv
-      - name: Build dist (repeat for safety)
+      - name: Build dist
         run: uv build --sdist --wheel
       - name: Publish to PyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         run: uv publish --token "$UV_PUBLISH_TOKEN"
+
+
