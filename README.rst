@@ -1,7 +1,7 @@
 faker_credit_score
 ==================
 
-|pypi| |unix_build| |coverage| |license| |codacy| |black|
+|pypi| |status| |coverage| |license| |black|
 
 faker_credit_score is a community-created provider for the `Faker`_ test data
 generator Python package.
@@ -83,26 +83,21 @@ Execute unit tests and calculate code coverage like so:
     ----------------------------------------------------
     faker_credit_score/__init__.py      58      0   100%
 
+.. |pypi| image:: https://img.shields.io/pypi/v/faker-credit-score.svg?style=flat-square
+   :target: https://pypi.org/project/faker-credit-score/
+   :alt: Latest version released on PyPI
 
-.. |pypi| image:: https://img.shields.io/pypi/v/faker_credit_score.svg?style=flat-square&label=version
-    :target: https://pypi.python.org/pypi/faker_credit_score
-    :alt: Latest version released on PyPi
+.. |status| image:: https://github.com/crd/faker_credit_score/actions/workflows/release.yml/badge.svg?style=flat-square
+   :target: https://github.com/crd/faker_credit_score/actions/workflows/release.yml
+   :alt: Release workflow status
 
-.. |unix_build| image:: https://img.shields.io/travis/crd/faker_credit_score/develop.svg?style=flat-square&label=unix%20build
-    :target: http://travis-ci.org/crd/faker_credit_score
-    :alt: Build status of the develop branch on Mac/Linux
-
-.. |coverage| image:: https://img.shields.io/coveralls/crd/faker_credit_score/develop.svg?style=flat-square
-    :target: https://coveralls.io/r/crd/faker_credit_score?branch=develop
+.. |coverage| image:: https://coveralls.io/repos/github/crd/faker_credit_score/badge.svg?branch=develop&style=flat-square
+:target: https://coveralls.io/github/crd/faker_credit_score?branch=develop
     :alt: Test coverage
 
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
     :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
     :alt: BSD 3-Clause License
-
-.. |codacy| image:: https://api.codacy.com/project/badge/Grade/accb555dd0ae4e9598333988d57487e7
-    :target: https://www.codacy.com/manual/crd/faker_credit_score?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=crd/faker_credit_score&amp;utm_campaign=Badge_Grade
-    :alt: Codacy code quality grade
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
     :target: https://github.com/ambv/black
