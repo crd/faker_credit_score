@@ -92,7 +92,7 @@ Execute unit tests and calculate code coverage like so:
    :alt: Release workflow status
 
 .. |coverage| image:: https://coveralls.io/repos/github/crd/faker_credit_score/badge.svg?branch=develop&style=flat-square
-:target: https://coveralls.io/github/crd/faker_credit_score?branch=develop
+    :target: https://coveralls.io/github/crd/faker_credit_score?branch=develop
     :alt: Test coverage
 
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
