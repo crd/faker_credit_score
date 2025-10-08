@@ -16,7 +16,4 @@ activate:
 test:
 	pipenv run pytest --cov=faker_credit_score
 
-coverage:
-	pipenv run coveralls
-
 .PHONY: help activate test

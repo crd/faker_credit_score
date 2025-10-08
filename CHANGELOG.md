@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2025-10-08
+
+Minor housekeeping, bringing documentation and pipelines up to standard.
+
+### Added
+
+- Introduced RELEASING.rst
+
+### Changed
+
+- Fixed README badges
+- Created a Github Action for test coverage
+- Eliminated unused references to travis
+
 ## [0.5.1] - 2025-09-28
 
 ### Added
