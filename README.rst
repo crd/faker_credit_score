@@ -1,7 +1,7 @@
 faker_credit_score
 ==================
 
-|pypi| |status| |license| |black|
+|pypi| |status| |coverage| |license| |black|
 
 faker_credit_score is a community-created provider for the `Faker`_ test data
 generator Python package.
@@ -83,20 +83,24 @@ Execute unit tests and calculate code coverage like so:
     ----------------------------------------------------
     faker_credit_score/__init__.py      58      0   100%
 
-.. |pypi| image:: https://img.shields.io/pypi/v/faker-credit-score.svg
+.. |pypi| image:: https://img.shields.io/pypi/v/faker-credit-score.svg?style=flat-square
    :target: https://pypi.org/project/faker-credit-score/
    :alt: Latest version released on PyPI
 
-.. |status| image:: https://github.com/crd/faker_credit_score/actions/workflows/release.yml/badge.svg
+.. |status| image:: https://github.com/crd/faker_credit_score/actions/workflows/release.yml/badge.svg?style=flat-square
    :target: https://github.com/crd/faker_credit_score/actions/workflows/release.yml
-   :alt: Release workflow status (tests + publish)
+   :alt: Release workflow status
 
-.. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
-   :target: https://opensource.org/licenses/BSD-3-Clause
-   :alt: BSD 3-Clause License
+.. |coverage| image:: https://coveralls.io/repos/github/crd/faker_credit_score/badge.svg?branch=develop&style=flat-square
+:target: https://coveralls.io/github/crd/faker_credit_score?branch=develop
+    :alt: Test coverage
 
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
-   :alt: Black code formatter
+.. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
+    :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
+    :alt: BSD 3-Clause License
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
+    :target: https://github.com/ambv/black
+    :alt: Black code formatter
 
 .. _Faker: https://github.com/joke2k/faker
