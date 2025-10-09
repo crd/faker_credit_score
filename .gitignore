@@ -103,5 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# mac
+**/.DS_Store
+
 # Don't track hatch vcs verison file
 faker_credit_score/_version.py
+
