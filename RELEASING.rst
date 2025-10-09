@@ -148,6 +148,39 @@ Publish to **PyPI** (only after testing)::
 export UV_PUBLISH_TOKEN="pypi-...pypi..."
 uv publish --token "$UV_PUBLISH_TOKEN"
 
+Automatic branch sync (master → develop)
+-------------------------------------
+
+After a successful tagged release (normal or hotfix), the CI will automatically open a pull request from ``master`` into ``develop`` to ensure the development line includes the exact release commit(s) and workflow changes.
+
+What to do:
+- Navigate to the PR titled ``merge: back-merge release <tag> from master into develop``.
+- If conflicts exist, resolve them in the PR.
+- Merge the PR once checks pass.
+
+Rationale:
+- Normal releases are cut from ``develop`` and merged into ``master``; tagging and publishing happen on ``master``. The back-merge PR ensures ``develop`` stays aligned post-release.
+- Hotfixes are cut from ``master``; tagging/publishing occur on ``master``. The same back-merge PR brings the hotfix back into ``develop``.
+
+Manual fallback (only if CI cannot open the PR):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If CI fails to create the PR, open one manually:
+
+- Base: ``develop``  
+- Compare: ``master``  
+- Title: ``merge: back-merge release <tag> from master into develop``
+
+If you must do it locally (rare):
+
+.. code-block:: bash
+
+   git fetch origin --tags
+   git switch -c sync/master-into-develop origin/develop
+   git merge origin/master           # resolve conflicts if any
+   git push -u origin sync/master-into-develop
+
+Then open a PR from ``sync/master-into-develop`` to ``develop`` and merge.
+
 ## Troubleshooting
 
 * **Resolver says version not found on TestPyPI**: force a fresh index view or allow multi-index selection::
