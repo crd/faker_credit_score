@@ -197,11 +197,11 @@ def test_credit_score_with_tier_and_score_type_exceptional_clamped(fake):
 
 def test_credit_score_with_tier_no_overlap(fake):
     """When tier range doesn't overlap model range, raise ValueError."""
-    from faker_credit_score import CreditScore
+    from faker_credit_score import CreditScore, CreditScoreObject
     # Create a score type with range 600-650, which has no overlap with "exceptional" (800-850)
-    CreditScore.credit_score_types["narrow_test"] = __import__(
-        "faker_credit_score"
-    ).CreditScoreObject("Narrow Test", ("Test",), (600, 650))
+    CreditScore.credit_score_types["narrow_test"] = CreditScoreObject(
+        "Narrow Test", ("Test",), (600, 650)
+    )
     try:
         with pytest.raises(ValueError):
             fake.credit_score(score_type="narrow_test", tier="exceptional")
@@ -210,7 +210,7 @@ def test_credit_score_with_tier_no_overlap(fake):
 
 
 def test_credit_score_with_invalid_tier(fake):
-    with pytest.raises(KeyError):
+    with pytest.raises(ValueError, match="Unknown tier 'nonexistent'"):
         fake.credit_score(tier="nonexistent")
 
 
