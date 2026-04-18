@@ -10,38 +10,32 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [‘3.10’, ‘3.11’, ‘3.12’, ‘3.13’, ‘3.14’]
     env:
       PYTHONUTF8: 1
     steps:
-      # 1. Check out the repository
       - uses: actions/checkout@v5
 
-      # 2. Install uv and enable caching of its package cache.
       - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-          # Pin uv for reproducibility, e.g. version: "0.9.0"
 
-      # 3. Install Python (using GitHub’s cache).  You can choose any version ≥3.9.
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
-      # 4. Sync dependencies from uv.lock.  The --dev flag ensures dev deps
-      #    like pytest-cov are installed
       - name: Install project dependencies
         run: uv sync --locked --all-extras --dev
 
-      # 5. Run tests and produce coverage.xml.  The uv run command automatically
-      #    activates the environment before running pytest
       - name: Run tests with coverage
-        run: |
-          uv run pytest --cov=faker_credit_score --cov-report=xml
+        run: uv run pytest --cov=faker_credit_score --cov-report=xml
 
-      # 6. Upload coverage to Coveralls.  The GITHUB_TOKEN authenticates the upload
       - name: Upload coverage to Coveralls
+        if: matrix.python-version == ‘3.12’
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
