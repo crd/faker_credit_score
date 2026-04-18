@@ -119,7 +119,7 @@ jobs:
             const repo = context.repo.repo;
 
             // Check if a PR from main -> develop already exists and is open.
-            const { data: prs } = await github.pulls.list({
+            const { data: prs } = await github.rest.pulls.list({
               owner, repo, state: 'open', base: 'develop', head: `${owner}:main`
             });
 
@@ -139,7 +139,7 @@ jobs:
               `- Merge once green.`
             ].join('\n');
 
-            const { data: pr } = await github.pulls.create({
+            const { data: pr } = await github.rest.pulls.create({
               owner, repo,
               title, head: 'main', base: 'develop', body,
               maintainer_can_modify: true, draft: false
