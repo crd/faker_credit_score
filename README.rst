@@ -176,7 +176,7 @@ BSD 3-Clause. See `LICENSE <LICENSE>`_ for details.
     :alt: Test coverage
 
 .. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square
-    :target: https://github.com/crd/faker_credit_score/blob/master/LICENSE
+    :target: https://github.com/crd/faker_credit_score/blob/main/LICENSE
     :alt: BSD 3-Clause License
 
 .. _Faker: https://github.com/joke2k/faker
