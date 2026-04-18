@@ -105,6 +105,8 @@ def test_random_credit_score_full(fake):
         # Destructuring works
         name, provider, score = result
         assert name == result.name
+        # str() produces CLI-friendly multi-line format
+        assert str(result) == f"{result.name}\n{result.provider}\n{result.score}"
 
 
 def test_credit_score_full_of_a_specific_type(fake):

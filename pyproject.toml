@@ -19,7 +19,6 @@ classifiers = [
   "Intended Audience :: Financial and Insurance Industry",
   "Topic :: Software Development :: Testing",
   "Topic :: Office/Business :: Financial",
-  "Framework :: Faker",
 ]
 dependencies = [
     "faker>=37.8.0",

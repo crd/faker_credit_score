@@ -4,7 +4,11 @@ from collections import OrderedDict, namedtuple
 
 from faker.providers import BaseProvider
 
-CreditScoreResult = namedtuple("CreditScoreResult", ["name", "provider", "score"])
+class CreditScoreResult(namedtuple("CreditScoreResult", ["name", "provider", "score"])):
+    """ A credit score result with name, provider, and score fields. """
+
+    def __str__(self):
+        return f"{self.name}\n{self.provider}\n{self.score}"
 
 
 class CreditScoreObject(object):
