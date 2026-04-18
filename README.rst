@@ -59,6 +59,27 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
     fake.credit_score()
     # 791
 
+Credit Score Tiers
+~~~~~~~~~~~~~~~~~~
+
+Generate scores constrained to a tier, or classify existing scores:
+
+.. code:: python
+
+    fake.credit_score(tier="poor")
+    # 542
+
+    fake.credit_score(tier="exceptional")
+    # 831
+
+    fake.credit_score_tier()
+    # 'good'
+
+    fake.credit_score_tier(score=720)
+    # 'good'
+
+Supported tiers: ``poor`` (300-579), ``fair`` (580-669), ``good`` (670-739), ``very_good`` (740-799), ``exceptional`` (800-850).
+
 Contributing
 ------------
 

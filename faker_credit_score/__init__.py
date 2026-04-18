@@ -52,6 +52,14 @@ class Provider(BaseProvider):
     # Add alias for FICO to map to FICO 8
     credit_score_types["fico"] = credit_score_types["fico8"]
 
+    credit_score_tiers = OrderedDict([
+        ("poor", (300, 579)),
+        ("fair", (580, 669)),
+        ("good", (670, 739)),
+        ("very_good", (740, 799)),
+        ("exceptional", (800, 850)),
+    ])
+
     def credit_score_name(self, score_type=None):
         """ Returns the name of the credit score. """
         if score_type is None:
@@ -64,13 +72,23 @@ class Provider(BaseProvider):
             score_type = self.random_element(self.credit_score_types.keys())
         return self.random_element(self._credit_score_type(score_type).providers)
 
-    def credit_score(self, score_type=None):
-        """ Returns a valid credit score. """
+    def credit_score(self, score_type=None, tier=None):
+        """ Returns a valid credit score, optionally constrained to a tier. """
         credit_score_summary = self._credit_score_type(score_type)
-        score = self._generate_credit_score(credit_score_summary.score_range)
-        return score
+        if tier is not None:
+            tier_low, tier_high = self.credit_score_tiers[tier]
+            model_low, model_high = credit_score_summary.score_range
+            effective_low = max(tier_low, model_low)
+            effective_high = min(tier_high, model_high)
+            if effective_low > effective_high:
+                raise ValueError(
+                    f"Tier '{tier}' has no valid scores for "
+                    f"score type '{credit_score_summary.name}'"
+                )
+            return self._generate_credit_score((effective_low, effective_high))
+        return self._generate_credit_score(credit_score_summary.score_range)
 
-    def credit_score_full(self, score_type=None):
+    def credit_score_full(self, score_type=None, tier=None):
         """ Returns a tuple representation of a valid credit score. """
         credit_score_summary = self._credit_score_type(score_type)
 
@@ -79,9 +97,22 @@ class Provider(BaseProvider):
         tpl = tpl.format(
             name=self.credit_score_name(credit_score_summary),
             provider=self.credit_score_provider(credit_score_summary),
-            credit_score=self.credit_score(credit_score_summary),
+            credit_score=self.credit_score(credit_score_summary, tier=tier),
         )
         return self.generator.parse(tpl)
+
+    def credit_score_tier(self, score=None):
+        """ Returns a credit score tier. Random if no score provided, otherwise classifies the given score. """
+        if score is None:
+            return self.random_element(list(self.credit_score_tiers.keys()))
+        for tier_name, (low, high) in self.credit_score_tiers.items():
+            if low <= score <= high:
+                return tier_name
+        raise ValueError(
+            f"Score {score} is outside the valid range "
+            f"({next(iter(self.credit_score_tiers.values()))[0]}-"
+            f"{list(self.credit_score_tiers.values())[-1][1]})"
+        )
 
     def _credit_score_type(self, score_type=None):
         """ Returns a credit score type instance of the specified type (random if none provided). """
