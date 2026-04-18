@@ -1,8 +1,14 @@
 # coding=utf-8
 from __future__ import unicode_literals
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 from faker.providers import BaseProvider
+
+class CreditScoreResult(namedtuple("CreditScoreResult", ["name", "provider", "score"])):
+    """ A credit score result with name, provider, and score fields. """
+
+    def __str__(self):
+        return f"{self.name}\n{self.provider}\n{self.score}"
 
 
 class CreditScoreObject(object):
@@ -94,17 +100,13 @@ class Provider(BaseProvider):
         return self._generate_credit_score(credit_score_summary.score_range)
 
     def credit_score_full(self, score_type=None, tier=None):
-        """ Returns a formatted string representation of a valid credit score. """
+        """ Returns a CreditScoreResult namedtuple with name, provider, and score fields. """
         credit_score_summary = self._credit_score_type(score_type)
-
-        tpl = "{name}\n" "{provider}\n" "{credit_score}\n"
-
-        tpl = tpl.format(
+        return CreditScoreResult(
             name=self.credit_score_name(credit_score_summary),
             provider=self.credit_score_provider(credit_score_summary),
-            credit_score=self.credit_score(credit_score_summary, tier=tier),
+            score=self.credit_score(credit_score_summary, tier=tier),
         )
-        return self.generator.parse(tpl)
 
     def credit_score_tier(self, score=None):
         """Returns a credit score tier.

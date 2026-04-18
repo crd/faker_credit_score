@@ -1,16 +1,24 @@
 [project]
 name = "faker-credit-score"
 dynamic = ["version"]
-description = "Adds fake credit score data generation to Faker Python package."
+description = "Generate realistic fake credit scores (FICO 8, VantageScore, etc.) for testing fintech, lending, and insurance applications. A Faker provider with tier-based generation and 10 scoring models."
 readme = { file = "README.rst", content-type = "text/x-rst" }
 license = { file = "LICENSE" }
 authors = [{ name = "Cory Donnelly" }]
+keywords = ["faker", "credit-score", "fico", "vantagescore", "test-data", "fintech", "lending", "mock-data"]
 requires-python = ">=3.10"
 classifiers = [
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "License :: OSI Approved :: BSD License",
   "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
   "Topic :: Software Development :: Testing",
+  "Topic :: Office/Business :: Financial",
 ]
 dependencies = [
     "faker>=37.8.0",
