@@ -93,16 +93,13 @@ Execute unit tests and calculate code coverage like so:
 .. code:: bash
 
     $ pytest --cov=faker_credit_score
-    ..............
-    ----------------------------------------------------------------------
-    Ran 14 tests in 0.406s
-
-    OK
+    ..............................
+    30 passed
 
     $ coverage report
     Name                             Stmts   Miss  Cover
     ----------------------------------------------------
-    faker_credit_score/__init__.py      58      0   100%
+    faker_credit_score/__init__.py      57      0   100%
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker-credit-score.svg?style=flat-square
    :target: https://pypi.org/project/faker-credit-score/
