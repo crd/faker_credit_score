@@ -6,19 +6,19 @@ faker_credit_score
 |pypi| |status| |coverage| |license|
 
 A `Faker`_ provider that generates realistic credit scores across 10 industry
-scoring models — FICO 8, VantageScore, Equifax Beacon, and more. Constrain by
+scoring models -- FICO 8, VantageScore, Equifax Beacon, and more. Constrain by
 tier, get real bureau names, and test the paths that actually matter.
 
 Why this exists
 ---------------
 
 Hardcoding ``credit_score = 720`` in your fixtures doesn't test anything. You
-don't know if that's "good" for FICO 8 or "fair" for Equifax Beacon 5.0. And
+don't know if that's "good" for FICO 8 or "fair" for Equifax Beacon 5.0 and
 ``random.randint(300, 850)`` gives you numbers that don't map to any real model.
 
 If you're building a lending flow, an insurance quote engine, or anything that
-branches on creditworthiness — you need scores that come from the right ranges,
-tied to real bureau names, in the right tiers.
+branches on creditworthiness you need scores that come from the right ranges,
+tied to real bureau names, with accurate tiering.
 
 **Before:**
 
@@ -31,11 +31,21 @@ tied to real bureau names, in the right tiers.
 
 .. code:: python
 
-    fake.credit_score(tier="poor")           # 542 — test the denial path
-    fake.credit_score(tier="exceptional")    # 831 — test the approval path
+    fake.credit_score(tier="poor")           # 542 -- test the denial path
+    fake.credit_score(tier="exceptional")    # 831 -- test the approval path
 
     result = fake.credit_score_full("fico5")
     # CreditScoreResult(name='Equifax Beacon 5.0', provider='Equifax', score=687)
+
+Features
+--------
+
+- 10 of the most commonly-used scoring models (FICO 8/9/10, VantageScore 3.0/4.0, and more)
+- Tier-based generation: ``poor``, ``fair``, ``good``, ``very_good``, ``exceptional``
+- Score classification
+- Structured results via ``CreditScoreResult`` namedtuple
+- Works with the Faker CLI
+- 100% test coverage
 
 Installation
 ------------
@@ -118,18 +128,25 @@ Generate scores constrained to a tier, or classify existing scores:
     fake.credit_score_tier(score=720)
     # 'good'
 
-Supported tiers: ``poor`` (300-579), ``fair`` (580-669), ``good`` (670-739),
-``very_good`` (740-799), ``exceptional`` (800-850).
++---------------+-----------+
+| Tier          | Range     |
++===============+===========+
+| poor          | 300 - 579 |
++---------------+-----------+
+| fair          | 580 - 669 |
++---------------+-----------+
+| good          | 670 - 739 |
++---------------+-----------+
+| very_good     | 740 - 799 |
++---------------+-----------+
+| exceptional   | 800 - 850 |
++---------------+-----------+
 
 Supported Models
 ~~~~~~~~~~~~~~~~
 
-* FICO Score 8
-* FICO Score 9
-* FICO Score 10
-* FICO Score 10 T
-* VantageScore 3.0
-* VantageScore 4.0
+* FICO Score 8, 9, 10, 10 T
+* VantageScore 3.0, 4.0
 * UltraFICO
 * Equifax Beacon 5.0
 * Experian/Fair Isaac Risk Model V2SM
@@ -141,27 +158,18 @@ Contributing
 Contributions are welcome, including from first-time open source contributors.
 See `CONTRIBUTING.md <CONTRIBUTING.md>`_ for setup instructions and ideas.
 
-Testing
+License
 -------
 
-.. code:: bash
-
-    $ pytest --cov=faker_credit_score
-    ..............................
-    30 passed
-
-    $ coverage report
-    Name                             Stmts   Miss  Cover
-    ----------------------------------------------------
-    faker_credit_score/__init__.py      57      0   100%
+BSD 3-Clause. See `LICENSE <LICENSE>`_ for details.
 
 .. |pypi| image:: https://img.shields.io/pypi/v/faker-credit-score.svg?style=flat-square
    :target: https://pypi.org/project/faker-credit-score/
    :alt: Latest version released on PyPI
 
-.. |status| image:: https://github.com/crd/faker_credit_score/actions/workflows/release.yml/badge.svg?style=flat-square
-   :target: https://github.com/crd/faker_credit_score/actions/workflows/release.yml
-   :alt: Release workflow status
+.. |status| image:: https://github.com/crd/faker_credit_score/actions/workflows/test.yml/badge.svg?style=flat-square
+   :target: https://github.com/crd/faker_credit_score/actions/workflows/test.yml
+   :alt: Test workflow status
 
 .. |coverage| image:: https://coveralls.io/repos/github/crd/faker_credit_score/badge.svg?branch=develop&style=flat-square
     :target: https://coveralls.io/github/crd/faker_credit_score?branch=develop
