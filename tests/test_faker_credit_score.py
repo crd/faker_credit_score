@@ -114,3 +114,55 @@ def test_credit_score_full_of_a_specific_type(fake):
     for _ in range(100):
         output = fake.credit_score_full("fico5")
         assert re.match(r"Equifax Beacon 5\.0\nEquifax\n\d{3}\n", output)
+
+
+def test_random_credit_score_tier(fake):
+    valid_tiers = ("poor", "fair", "good", "very_good", "exceptional")
+    for _ in range(100):
+        tier = fake.credit_score_tier()
+        assert tier in valid_tiers
+
+
+def test_credit_score_tier_classifies_poor(fake):
+    assert fake.credit_score_tier(score=300) == "poor"
+    assert fake.credit_score_tier(score=579) == "poor"
+    assert fake.credit_score_tier(score=450) == "poor"
+
+
+def test_credit_score_tier_classifies_fair(fake):
+    assert fake.credit_score_tier(score=580) == "fair"
+    assert fake.credit_score_tier(score=669) == "fair"
+
+
+def test_credit_score_tier_classifies_good(fake):
+    assert fake.credit_score_tier(score=670) == "good"
+    assert fake.credit_score_tier(score=739) == "good"
+
+
+def test_credit_score_tier_classifies_very_good(fake):
+    assert fake.credit_score_tier(score=740) == "very_good"
+    assert fake.credit_score_tier(score=799) == "very_good"
+
+
+def test_credit_score_tier_classifies_exceptional(fake):
+    assert fake.credit_score_tier(score=800) == "exceptional"
+    assert fake.credit_score_tier(score=850) == "exceptional"
+
+
+def test_credit_score_tier_boundary_values(fake):
+    """Verify each boundary falls into the correct tier (lower-bound inclusive)."""
+    assert fake.credit_score_tier(score=579) == "poor"
+    assert fake.credit_score_tier(score=580) == "fair"
+    assert fake.credit_score_tier(score=669) == "fair"
+    assert fake.credit_score_tier(score=670) == "good"
+    assert fake.credit_score_tier(score=739) == "good"
+    assert fake.credit_score_tier(score=740) == "very_good"
+    assert fake.credit_score_tier(score=799) == "very_good"
+    assert fake.credit_score_tier(score=800) == "exceptional"
+
+
+def test_credit_score_tier_out_of_range(fake):
+    with pytest.raises(ValueError):
+        fake.credit_score_tier(score=299)
+    with pytest.raises(ValueError):
+        fake.credit_score_tier(score=851)

@@ -52,6 +52,14 @@ class Provider(BaseProvider):
     # Add alias for FICO to map to FICO 8
     credit_score_types["fico"] = credit_score_types["fico8"]
 
+    credit_score_tiers = OrderedDict([
+        ("poor", (300, 579)),
+        ("fair", (580, 669)),
+        ("good", (670, 739)),
+        ("very_good", (740, 799)),
+        ("exceptional", (800, 850)),
+    ])
+
     def credit_score_name(self, score_type=None):
         """ Returns the name of the credit score. """
         if score_type is None:
@@ -82,6 +90,19 @@ class Provider(BaseProvider):
             credit_score=self.credit_score(credit_score_summary),
         )
         return self.generator.parse(tpl)
+
+    def credit_score_tier(self, score=None):
+        """ Returns a credit score tier. Random if no score provided, otherwise classifies the given score. """
+        if score is None:
+            return self.random_element(list(self.credit_score_tiers.keys()))
+        for tier_name, (low, high) in self.credit_score_tiers.items():
+            if low <= score <= high:
+                return tier_name
+        raise ValueError(
+            f"Score {score} is outside the valid range "
+            f"({next(iter(self.credit_score_tiers.values()))[0]}-"
+            f"{list(self.credit_score_tiers.values())[-1][1]})"
+        )
 
     def _credit_score_type(self, score_type=None):
         """ Returns a credit score type instance of the specified type (random if none provided). """
