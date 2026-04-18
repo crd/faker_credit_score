@@ -166,3 +166,35 @@ def test_credit_score_tier_out_of_range(fake):
         fake.credit_score_tier(score=299)
     with pytest.raises(ValueError):
         fake.credit_score_tier(score=851)
+
+
+def test_credit_score_with_tier_poor(fake):
+    for _ in range(100):
+        score = fake.credit_score(tier="poor")
+        assert 300 <= score <= 579
+
+
+def test_credit_score_with_tier_exceptional(fake):
+    for _ in range(100):
+        score = fake.credit_score(tier="exceptional")
+        assert 800 <= score <= 850
+
+
+def test_credit_score_with_tier_and_score_type(fake):
+    """When both tier and score_type given, clamp to intersection of ranges."""
+    for _ in range(100):
+        # fico5 range is 334-818, "poor" is 300-579 → effective 334-579
+        score = fake.credit_score(score_type="fico5", tier="poor")
+        assert 334 <= score <= 579
+
+
+def test_credit_score_with_tier_and_score_type_exceptional_clamped(fake):
+    """fico5 range is 334-818, "exceptional" is 800-850 → effective 800-818."""
+    for _ in range(100):
+        score = fake.credit_score(score_type="fico5", tier="exceptional")
+        assert 800 <= score <= 818
+
+
+def test_credit_score_with_invalid_tier(fake):
+    with pytest.raises(KeyError):
+        fake.credit_score(tier="nonexistent")
