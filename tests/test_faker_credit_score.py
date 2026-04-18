@@ -212,3 +212,23 @@ def test_credit_score_with_tier_no_overlap(fake):
 def test_credit_score_with_invalid_tier(fake):
     with pytest.raises(KeyError):
         fake.credit_score(tier="nonexistent")
+
+
+def test_credit_score_full_with_tier(fake):
+    """Full output with tier constraint should produce score in tier range."""
+    for _ in range(100):
+        output = fake.credit_score_full(tier="exceptional")
+        lines = output.strip().split("\n")
+        score = int(lines[2])
+        assert 800 <= score <= 850
+
+
+def test_credit_score_full_with_tier_and_score_type(fake):
+    """Full output with both tier and score_type."""
+    for _ in range(100):
+        output = fake.credit_score_full(score_type="fico5", tier="poor")
+        lines = output.strip().split("\n")
+        assert lines[0] == "Equifax Beacon 5.0"
+        assert lines[1] == "Equifax"
+        score = int(lines[2])
+        assert 334 <= score <= 579

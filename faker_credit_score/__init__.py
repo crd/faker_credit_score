@@ -88,7 +88,7 @@ class Provider(BaseProvider):
             return self._generate_credit_score((effective_low, effective_high))
         return self._generate_credit_score(credit_score_summary.score_range)
 
-    def credit_score_full(self, score_type=None):
+    def credit_score_full(self, score_type=None, tier=None):
         """ Returns a tuple representation of a valid credit score. """
         credit_score_summary = self._credit_score_type(score_type)
 
@@ -97,7 +97,7 @@ class Provider(BaseProvider):
         tpl = tpl.format(
             name=self.credit_score_name(credit_score_summary),
             provider=self.credit_score_provider(credit_score_summary),
-            credit_score=self.credit_score(credit_score_summary),
+            credit_score=self.credit_score(credit_score_summary, tier=tier),
         )
         return self.generator.parse(tpl)
 
