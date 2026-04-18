@@ -19,7 +19,7 @@ This project uses **tag-driven versioning** via `hatch-vcs`: the package version
 ## Branching model
 
 * Default integration branch: `develop`
-* Protected release branch: `master`
+* Protected release branch: `main`
 * Feature work: short-lived branches off `develop`
 
 ## Feature workflow
@@ -42,11 +42,11 @@ This project uses **tag-driven versioning** via `hatch-vcs`: the package version
    git commit -am "chore(release): prepare 0.5.1" || true
    git push -u origin release/0.5.1
 
-3. **Open a PR**: `release/0.5.1` → `master`. Merge when green (this ensures the workflow file is in the commit you'll tag).
+3. **Open a PR**: `release/0.5.1` → `main`. Merge when green (this ensures the workflow file is in the commit you'll tag).
 
-4. **Tag on master** (this sets the package version via hatch-vcs)::
+4. **Tag on main** (this sets the package version via hatch-vcs)::
 
-   git checkout master
+   git checkout main
    git pull
    git tag v0.5.1
    git push origin v0.5.1
@@ -79,29 +79,29 @@ This project uses **tag-driven versioning** via `hatch-vcs`: the package version
 
    git checkout develop
    git pull
-   git merge --no-ff origin/master
+   git merge --no-ff origin/main
    git push
 
 ## Hotfix workflow (e.g., 0.5.2)
 
-1. Branch from `master`::
+1. Branch from `main`::
 
-   git checkout -b hotfix/0.5.2 origin/master
+   git checkout -b hotfix/0.5.2 origin/main
 
-2. Commit the fix + tests, push, open PR **into** `master` and merge.
+2. Commit the fix + tests, push, open PR **into** `main` and merge.
 
 3. Tag & release::
 
-   git checkout master && git pull
+   git checkout main && git pull
    git tag v0.5.2
    git push origin v0.5.2
 
 4. CI publishes to TestPyPI → verify locally → approve promotion to PyPI.
 
-5. Back-merge `master` → `develop`::
+5. Back-merge `main` → `develop`::
 
    git checkout develop && git pull
-   git merge --no-ff origin/master
+   git merge --no-ff origin/main
    git push
 
 ## Pre-releases (RCs)
@@ -148,38 +148,38 @@ Publish to **PyPI** (only after testing)::
 export UV_PUBLISH_TOKEN="pypi-...pypi..."
 uv publish --token "$UV_PUBLISH_TOKEN"
 
-Automatic branch sync (master → develop)
+Automatic branch sync (main → develop)
 -------------------------------------
 
-After a successful tagged release (normal or hotfix), the CI will automatically open a pull request from ``master`` into ``develop`` to ensure the development line includes the exact release commit(s) and workflow changes.
+After a successful tagged release (normal or hotfix), the CI will automatically open a pull request from ``main`` into ``develop`` to ensure the development line includes the exact release commit(s) and workflow changes.
 
 What to do:
-- Navigate to the PR titled ``merge: back-merge release <tag> from master into develop``.
+- Navigate to the PR titled ``merge: back-merge release <tag> from main into develop``.
 - If conflicts exist, resolve them in the PR.
 - Merge the PR once checks pass.
 
 Rationale:
-- Normal releases are cut from ``develop`` and merged into ``master``; tagging and publishing happen on ``master``. The back-merge PR ensures ``develop`` stays aligned post-release.
-- Hotfixes are cut from ``master``; tagging/publishing occur on ``master``. The same back-merge PR brings the hotfix back into ``develop``.
+- Normal releases are cut from ``develop`` and merged into ``main``; tagging and publishing happen on ``main``. The back-merge PR ensures ``develop`` stays aligned post-release.
+- Hotfixes are cut from ``main``; tagging/publishing occur on ``main``. The same back-merge PR brings the hotfix back into ``develop``.
 
 Manual fallback (only if CI cannot open the PR):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If CI fails to create the PR, open one manually:
 
 - Base: ``develop``  
-- Compare: ``master``  
-- Title: ``merge: back-merge release <tag> from master into develop``
+- Compare: ``main``  
+- Title: ``merge: back-merge release <tag> from main into develop``
 
 If you must do it locally (rare):
 
 .. code-block:: bash
 
    git fetch origin --tags
-   git switch -c sync/master-into-develop origin/develop
-   git merge origin/master           # resolve conflicts if any
-   git push -u origin sync/master-into-develop
+   git switch -c sync/main-into-develop origin/develop
+   git merge origin/main           # resolve conflicts if any
+   git push -u origin sync/main-into-develop
 
-Then open a PR from ``sync/master-into-develop`` to ``develop`` and merge.
+Then open a PR from ``sync/main-into-develop`` to ``develop`` and merge.
 
 ## Troubleshooting
 
@@ -194,7 +194,7 @@ Then open a PR from ``sync/master-into-develop`` to ``develop`` and merge.
 
 * **Actions error “No virtual environment found”**: ensure the test job uses `uv sync` (creates `.venv`) and tests with `uv run pytest -q`.
 
-* **Workflows didn't run on tag**: confirm the tag was pushed on a commit **that already contains** `.github/workflows/release.yml` (merge your release PR to `master` before tagging).
+* **Workflows didn't run on tag**: confirm the tag was pushed on a commit **that already contains** `.github/workflows/release.yml` (merge your release PR to `main` before tagging).
 
 ## Compatibility & build environment
 

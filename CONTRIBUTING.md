@@ -16,7 +16,7 @@ Thanks for your interest! This project is small and friendly — contributions o
 
 ## Making changes
 
-1. Create a branch from `develop` (not `master`)
+1. Create a branch from `develop` (not `main`)
 2. Write tests for any new functionality — we maintain 100% coverage
 3. Make sure all tests pass before submitting
 4. Open a pull request against `develop`
