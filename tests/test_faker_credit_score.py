@@ -1,7 +1,6 @@
 #  -*- coding: utf-8 -*-
 
 import pytest
-import re
 
 
 @pytest.fixture
@@ -95,25 +94,25 @@ def test_credit_score_name_of_a_specific_type_fico4(fake):
 
 
 def test_random_credit_score_full(fake):
-    """ Output looks like this (provider, model, and credit score are random):
-    Equifax Beacon 5.0
-    Equifax
-    660
-    """
+    """Returns a CreditScoreResult namedtuple with name, provider, and score."""
+    from faker_credit_score import CreditScoreResult
     for _ in range(100):
-        output = fake.credit_score_full()
-        assert re.match(r".+\n.+\n\d{3}\n", output)
+        result = fake.credit_score_full()
+        assert isinstance(result, CreditScoreResult)
+        assert isinstance(result.name, str)
+        assert isinstance(result.provider, str)
+        assert isinstance(result.score, int)
+        # Destructuring works
+        name, provider, score = result
+        assert name == result.name
 
 
 def test_credit_score_full_of_a_specific_type(fake):
-    """ Output looks like this (credit score is random):
-    Equifax Beacon 5.0
-    Equifax
-    660
-    """
     for _ in range(100):
-        output = fake.credit_score_full("fico5")
-        assert re.match(r"Equifax Beacon 5\.0\nEquifax\n\d{3}\n", output)
+        result = fake.credit_score_full("fico5")
+        assert result.name == "Equifax Beacon 5.0"
+        assert result.provider == "Equifax"
+        assert 334 <= result.score <= 818
 
 
 def test_random_credit_score_tier(fake):
@@ -217,18 +216,14 @@ def test_credit_score_with_invalid_tier(fake):
 def test_credit_score_full_with_tier(fake):
     """Full output with tier constraint should produce score in tier range."""
     for _ in range(100):
-        output = fake.credit_score_full(tier="exceptional")
-        lines = output.strip().split("\n")
-        score = int(lines[2])
-        assert 800 <= score <= 850
+        result = fake.credit_score_full(tier="exceptional")
+        assert 800 <= result.score <= 850
 
 
 def test_credit_score_full_with_tier_and_score_type(fake):
     """Full output with both tier and score_type."""
     for _ in range(100):
-        output = fake.credit_score_full(score_type="fico5", tier="poor")
-        lines = output.strip().split("\n")
-        assert lines[0] == "Equifax Beacon 5.0"
-        assert lines[1] == "Equifax"
-        score = int(lines[2])
-        assert 334 <= score <= 579
+        result = fake.credit_score_full(score_type="fico5", tier="poor")
+        assert result.name == "Equifax Beacon 5.0"
+        assert result.provider == "Equifax"
+        assert 334 <= result.score <= 579

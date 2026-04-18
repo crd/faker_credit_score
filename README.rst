@@ -59,6 +59,11 @@ Add the ``CreditScore`` Provider to your ``Faker`` instance:
     fake.credit_score()
     # 791
 
+    fake.credit_score_full()
+    # CreditScoreResult(name='FICO Score 8', provider='Equifax', score=791)
+
+    name, provider, score = fake.credit_score_full("fico5")
+
 Credit Score Tiers
 ~~~~~~~~~~~~~~~~~~
 
