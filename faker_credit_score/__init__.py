@@ -122,16 +122,16 @@ class Provider(BaseProvider):
 
         # Determine which providers to generate scores for
         if providers is not None:
-            requested = {p.lower() for p in providers}
             available_lower = {p.lower(): p for p in model.providers}
-            invalid = requested - set(available_lower)
+            requested_lower = [p.lower() for p in providers]
+            invalid = set(requested_lower) - set(available_lower)
             if invalid:
                 raise ValueError(
                     f"Provider(s) {', '.join(sorted(invalid))} not available "
                     f"for '{model.name}'. "
                     f"Available: {', '.join(model.providers)}"
                 )
-            selected = [available_lower[r] for r in requested]
+            selected = [available_lower[p] for p in requested_lower]
         else:
             selected = list(model.providers)
 

@@ -299,8 +299,9 @@ def test_credit_score_profile_with_tier(fake):
     for _ in range(100):
         profile = fake.credit_score_profile(score_type="fico8", tier="poor")
         for result in profile.values():
-            # Base score is in poor range; jitter may push slightly outside
-            assert 275 <= result.score <= 604  # 300±25 to 579±25
+            # Base score is in poor range (300-579); jitter may push up but
+            # model clamp prevents going below 300
+            assert 300 <= result.score <= 604
 
 
 def test_credit_score_profile_with_tier_and_model(fake):
@@ -344,3 +345,27 @@ def test_credit_score_profile_scores_within_model_range(fake):
         profile = fake.credit_score_profile(score_type="fico5")
         for result in profile.values():
             assert 334 <= result.score <= 818
+
+
+def test_credit_score_profile_empty_providers(fake):
+    """Empty providers list returns an empty dict."""
+    assert fake.credit_score_profile(score_type="fico8", providers=[]) == {}
+
+
+def test_credit_score_profile_duplicate_providers(fake):
+    """Duplicate provider names are preserved (one entry per request)."""
+    profile = fake.credit_score_profile(
+        score_type="fico8", providers=["Equifax", "equifax"]
+    )
+    # Both resolve to "Equifax" -- dict deduplicates naturally
+    assert set(profile.keys()) == {"Equifax"}
+
+
+def test_credit_score_profile_provider_filter_with_tier(fake):
+    """Provider filter combined with tier constraint."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(
+            score_type="fico8", providers=["Equifax"], tier="poor"
+        )
+        assert set(profile.keys()) == {"Equifax"}
+        assert 300 <= profile["Equifax"].score <= 604
