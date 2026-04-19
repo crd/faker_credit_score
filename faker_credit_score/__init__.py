@@ -58,6 +58,8 @@ class Provider(BaseProvider):
     # Add alias for FICO to map to FICO 8
     credit_score_types["fico"] = credit_score_types["fico8"]
 
+    profile_jitter = 25
+
     credit_score_tiers = OrderedDict([
         ("poor", (300, 579)),
         ("fair", (580, 669)),
@@ -107,6 +109,64 @@ class Provider(BaseProvider):
             provider=self.credit_score_provider(credit_score_summary),
             score=self.credit_score(credit_score_summary, tier=tier),
         )
+
+    def credit_score_profile(self, score_type=None, providers=None, tier=None):
+        """Returns correlated credit scores across bureaus for the same person.
+
+        Generates a base score and applies small per-bureau jitter (±25 points)
+        to simulate realistic cross-bureau variance. Individual bureau scores
+        may drift across tier boundaries.
+
+        Returns a dict mapping provider name to CreditScoreResult.
+        """
+        model = self._credit_score_type(score_type)
+        model_low, model_high = model.score_range
+
+        # Determine which providers to generate scores for
+        if providers is not None:
+            available_lower = {p.lower(): p for p in model.providers}
+            requested_lower = [p.lower() for p in providers]
+            invalid = set(requested_lower) - set(available_lower)
+            if invalid:
+                raise ValueError(
+                    f"Provider(s) {', '.join(sorted(invalid))} not available "
+                    f"for '{model.name}'. "
+                    f"Available: {', '.join(model.providers)}"
+                )
+            selected = [available_lower[p] for p in requested_lower]
+        else:
+            selected = list(model.providers)
+
+        # Calculate effective range for the base score
+        base_low, base_high = model_low, model_high
+        if tier is not None:
+            if tier not in self.credit_score_tiers:
+                raise ValueError(
+                    f"Unknown tier '{tier}'. "
+                    f"Valid tiers: {', '.join(self.credit_score_tiers)}"
+                )
+            tier_low, tier_high = self.credit_score_tiers[tier]
+            base_low = max(base_low, tier_low)
+            base_high = min(base_high, tier_high)
+            if base_low > base_high:
+                raise ValueError(
+                    f"Tier '{tier}' has no valid scores for "
+                    f"score type '{model.name}'"
+                )
+
+        base_score = self.random_int(base_low, base_high)
+
+        results = {}
+        for provider in selected:
+            jitter = self.random_int(-self.profile_jitter, self.profile_jitter)
+            score = max(model_low, min(model_high, base_score + jitter))
+            results[provider] = CreditScoreResult(
+                name=model.name,
+                provider=provider,
+                score=score,
+            )
+
+        return results
 
     def credit_score_tier(self, score=None):
         """Returns a credit score tier.

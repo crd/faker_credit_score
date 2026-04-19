@@ -229,3 +229,156 @@ def test_credit_score_full_with_tier_and_score_type(fake):
         assert result.name == "Equifax Beacon 5.0"
         assert result.provider == "Equifax"
         assert 334 <= result.score <= 579
+
+
+# --- credit_score_profile tests ---
+
+
+def test_credit_score_profile_default(fake):
+    """Default profile returns a dict with CreditScoreResult per provider."""
+    from faker_credit_score import CreditScoreResult
+    for _ in range(100):
+        profile = fake.credit_score_profile()
+        assert isinstance(profile, dict)
+        assert len(profile) >= 1
+        for provider, result in profile.items():
+            assert isinstance(result, CreditScoreResult)
+            assert result.provider == provider
+
+
+def test_credit_score_profile_specific_model(fake):
+    """FICO 8 profile returns all three bureaus."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico8")
+        assert set(profile.keys()) == {"Equifax", "Experian", "TransUnion"}
+        for result in profile.values():
+            assert result.name == "FICO Score 8"
+            assert 300 <= result.score <= 850
+
+
+def test_credit_score_profile_single_bureau_model(fake):
+    """Single-bureau model returns a single-entry dict."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico5")
+        assert set(profile.keys()) == {"Equifax"}
+        assert profile["Equifax"].name == "Equifax Beacon 5.0"
+        assert 334 <= profile["Equifax"].score <= 818
+
+
+def test_credit_score_profile_filter_providers(fake):
+    """Only requested providers are returned."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(
+            score_type="fico8", providers=["Equifax", "TransUnion"]
+        )
+        assert set(profile.keys()) == {"Equifax", "TransUnion"}
+
+
+def test_credit_score_profile_case_insensitive_providers(fake):
+    """Provider names are matched case-insensitively."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(
+            score_type="fico8", providers=["equifax", "EXPERIAN"]
+        )
+        assert set(profile.keys()) == {"Equifax", "Experian"}
+
+
+def test_credit_score_profile_invalid_provider(fake):
+    """Requesting a provider not available for the model raises ValueError."""
+    with pytest.raises(ValueError, match="not available"):
+        fake.credit_score_profile(score_type="fico5", providers=["TransUnion"])
+
+
+def test_credit_score_profile_nonexistent_score_type(fake):
+    with pytest.raises(KeyError):
+        fake.credit_score_profile(score_type="nonexistent")
+
+
+def test_credit_score_profile_with_tier(fake):
+    """Tier constrains scores to the right ballpark."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low = CreditScore.credit_score_types["fico8"].score_range[0]
+    tier_high = CreditScore.credit_score_tiers["poor"][1]
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico8", tier="poor")
+        for result in profile.values():
+            # Base is in poor range; jitter may push up, model clamp prevents below model_low
+            assert model_low <= result.score <= tier_high + jitter
+
+
+def test_credit_score_profile_with_tier_and_model(fake):
+    """Combined tier and model constraints work correctly."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low, model_high = CreditScore.credit_score_types["fico5"].score_range
+    tier_low = CreditScore.credit_score_tiers["exceptional"][0]
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico5", tier="exceptional")
+        assert set(profile.keys()) == {"Equifax"}
+        # base 800-818, jitter may push down but clamp to model range
+        assert max(model_low, tier_low - jitter) <= profile["Equifax"].score <= model_high
+
+
+def test_credit_score_profile_invalid_tier(fake):
+    with pytest.raises(ValueError, match="Unknown tier"):
+        fake.credit_score_profile(tier="nonexistent")
+
+
+def test_credit_score_profile_tier_no_overlap(fake):
+    """Tier with no overlap raises ValueError."""
+    from faker_credit_score import CreditScore, CreditScoreObject
+    CreditScore.credit_score_types["narrow_test"] = CreditScoreObject(
+        "Narrow Test", ("Test",), (600, 650)
+    )
+    try:
+        with pytest.raises(ValueError):
+            fake.credit_score_profile(score_type="narrow_test", tier="exceptional")
+    finally:
+        del CreditScore.credit_score_types["narrow_test"]
+
+
+def test_credit_score_profile_scores_correlated(fake):
+    """All scores in a profile should be within 2x jitter of each other."""
+    from faker_credit_score import CreditScore
+    max_spread = CreditScore.profile_jitter * 2
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico8")
+        scores = [r.score for r in profile.values()]
+        assert max(scores) - min(scores) <= max_spread
+
+
+def test_credit_score_profile_scores_within_model_range(fake):
+    """Jitter should never push scores outside the model's valid range."""
+    for _ in range(100):
+        profile = fake.credit_score_profile(score_type="fico5")
+        for result in profile.values():
+            assert 334 <= result.score <= 818
+
+
+def test_credit_score_profile_empty_providers(fake):
+    """Empty providers list returns an empty dict."""
+    assert fake.credit_score_profile(score_type="fico8", providers=[]) == {}
+
+
+def test_credit_score_profile_duplicate_providers(fake):
+    """Duplicate provider names are preserved (one entry per request)."""
+    profile = fake.credit_score_profile(
+        score_type="fico8", providers=["Equifax", "equifax"]
+    )
+    # Both resolve to "Equifax" -- dict deduplicates naturally
+    assert set(profile.keys()) == {"Equifax"}
+
+
+def test_credit_score_profile_provider_filter_with_tier(fake):
+    """Provider filter combined with tier constraint."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low = CreditScore.credit_score_types["fico8"].score_range[0]
+    tier_high = CreditScore.credit_score_tiers["poor"][1]
+    for _ in range(100):
+        profile = fake.credit_score_profile(
+            score_type="fico8", providers=["Equifax"], tier="poor"
+        )
+        assert set(profile.keys()) == {"Equifax"}
+        assert model_low <= profile["Equifax"].score <= tier_high + jitter
