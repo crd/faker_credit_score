@@ -58,6 +58,8 @@ class Provider(BaseProvider):
     # Add alias for FICO to map to FICO 8
     credit_score_types["fico"] = credit_score_types["fico8"]
 
+    profile_jitter = 25
+
     credit_score_tiers = OrderedDict([
         ("poor", (300, 579)),
         ("fair", (580, 669)),
@@ -156,7 +158,7 @@ class Provider(BaseProvider):
 
         results = {}
         for provider in selected:
-            jitter = self.random_int(-25, 25)
+            jitter = self.random_int(-self.profile_jitter, self.profile_jitter)
             score = max(model_low, min(model_high, base_score + jitter))
             results[provider] = CreditScoreResult(
                 name=model.name,

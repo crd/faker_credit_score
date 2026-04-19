@@ -296,21 +296,28 @@ def test_credit_score_profile_nonexistent_score_type(fake):
 
 def test_credit_score_profile_with_tier(fake):
     """Tier constrains scores to the right ballpark."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low = CreditScore.credit_score_types["fico8"].score_range[0]
+    tier_high = CreditScore.credit_score_tiers["poor"][1]
     for _ in range(100):
         profile = fake.credit_score_profile(score_type="fico8", tier="poor")
         for result in profile.values():
-            # Base score is in poor range (300-579); jitter may push up but
-            # model clamp prevents going below 300
-            assert 300 <= result.score <= 604
+            # Base is in poor range; jitter may push up, model clamp prevents below model_low
+            assert model_low <= result.score <= tier_high + jitter
 
 
 def test_credit_score_profile_with_tier_and_model(fake):
     """Combined tier and model constraints work correctly."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low, model_high = CreditScore.credit_score_types["fico5"].score_range
+    tier_low = CreditScore.credit_score_tiers["exceptional"][0]
     for _ in range(100):
         profile = fake.credit_score_profile(score_type="fico5", tier="exceptional")
         assert set(profile.keys()) == {"Equifax"}
-        # fico5 range 334-818, exceptional 800-850 → base 800-818, jitter clamped to model
-        assert 775 <= profile["Equifax"].score <= 818
+        # base 800-818, jitter may push down but clamp to model range
+        assert max(model_low, tier_low - jitter) <= profile["Equifax"].score <= model_high
 
 
 def test_credit_score_profile_invalid_tier(fake):
@@ -332,11 +339,13 @@ def test_credit_score_profile_tier_no_overlap(fake):
 
 
 def test_credit_score_profile_scores_correlated(fake):
-    """All scores in a profile should be within 50 points of each other."""
+    """All scores in a profile should be within 2x jitter of each other."""
+    from faker_credit_score import CreditScore
+    max_spread = CreditScore.profile_jitter * 2
     for _ in range(100):
         profile = fake.credit_score_profile(score_type="fico8")
         scores = [r.score for r in profile.values()]
-        assert max(scores) - min(scores) <= 50
+        assert max(scores) - min(scores) <= max_spread
 
 
 def test_credit_score_profile_scores_within_model_range(fake):
@@ -363,9 +372,13 @@ def test_credit_score_profile_duplicate_providers(fake):
 
 def test_credit_score_profile_provider_filter_with_tier(fake):
     """Provider filter combined with tier constraint."""
+    from faker_credit_score import CreditScore
+    jitter = CreditScore.profile_jitter
+    model_low = CreditScore.credit_score_types["fico8"].score_range[0]
+    tier_high = CreditScore.credit_score_tiers["poor"][1]
     for _ in range(100):
         profile = fake.credit_score_profile(
             score_type="fico8", providers=["Equifax"], tier="poor"
         )
         assert set(profile.keys()) == {"Equifax"}
-        assert 300 <= profile["Equifax"].score <= 604
+        assert model_low <= profile["Equifax"].score <= tier_high + jitter
